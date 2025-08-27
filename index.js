@@ -14,52 +14,52 @@ const restartButton = document.getElementById("restart-btn");
 const progressBar = document.getElementById("progress");
 
 const quizQuestions = [
-  {
-    question: "What is the capital of France?",
-    answers: [
-      { text: "London", correct: false },
-      { text: "Berlin", correct: false },
-      { text: "Paris", correct: true },
-      { text: "Madrid", correct: false },
-    ],
-  },
-  {
-    question: "Which planet is known as the Red Planet?",
-    answers: [
-      { text: "Venus", correct: false },
-      { text: "Mars", correct: true },
-      { text: "Jupiter", correct: false },
-      { text: "Saturn", correct: false },
-    ],
-  },
-  {
-    question: "What is the largest ocean on Earth?",
-    answers: [
-      { text: "Atlantic Ocean", correct: false },
-      { text: "Indian Ocean", correct: false },
-      { text: "Arctic Ocean", correct: false },
-      { text: "Pacific Ocean", correct: true },
-    ],
-  },
-  {
-    question: "Which of these is NOT a programming language?",
-    answers: [
-      { text: "Java", correct: false },
-      { text: "Python", correct: false },
-      { text: "Banana", correct: true },
-      { text: "JavaScript", correct: false },
-    ],
-  },
-  {
-    question: "What is the chemical symbol for gold?",
-    answers: [
-      { text: "Go", correct: false },
-      { text: "Gd", correct: false },
-      { text: "Au", correct: true },
-      { text: "Ag", correct: false },
-    ],
-  },
-];
+      {
+        question: "What is the capital of France?",
+        answers: [
+          { text: "London", correct: false },
+          { text: "Berlin", correct: false },
+          { text: "Paris", correct: true },
+          { text: "Madrid", correct: false },
+        ],
+      },
+      {
+        question: "Which planet is known as the Red Planet?",
+        answers: [
+          { text: "Venus", correct: false },
+          { text: "Mars", correct: true },
+          { text: "Jupiter", correct: false },
+          { text: "Saturn", correct: false },
+        ],
+      },
+      {
+        question: "What is the largest ocean on Earth?",
+        answers: [
+          { text: "Atlantic Ocean", correct: false },
+          { text: "Indian Ocean", correct: false },
+          { text: "Arctic Ocean", correct: false },
+          { text: "Pacific Ocean", correct: true },
+        ],
+      },
+      {
+        question: "Which of these is NOT a programming language?",
+        answers: [
+          { text: "Java", correct: false },
+          { text: "Python", correct: false },
+          { text: "Banana", correct: true },
+          { text: "JavaScript", correct: false },
+        ],
+      },
+      {
+        question: "What is the chemical symbol for gold?",
+        answers: [
+          { text: "Go", correct: false },
+          { text: "Gd", correct: false },
+          { text: "Au", correct: true },
+          { text: "Ag", correct: false },
+        ],
+      },
+    ];
 
 // quiz State vars
 
@@ -72,8 +72,9 @@ maxScoreSpan.textContent=quizQuestions.length;
 
 // event listeners
 
-startButton.addEventListener("click",StartQuiz);
-startButton.addEventListener("click",restartQuiz);
+startButton.addEventListener("click", startQuiz);
+restartButton.addEventListener("click", restart);
+
 
 function startQuiz(){
 // reset vars
@@ -85,31 +86,30 @@ quizScreen.classList.add("active");
 
 showQuestion()
 }
-function showQuestion(){
-    // reset state
-    answerDisabled=false;
-    const currentQuestion=quizQuestions[currentQuestionIndex];
+function showQuestion() {
+    answerDisabled = false;
+    const currentQuestion = quizQuestions[currentQuestionIndex];
 
-    currentQuestionSpan.textContent=currentQuestionIndex+1;
-    const progressPercent=(currentQuestionIndex/quizQuestions.length)*100;
-    questionText.textContent=currentQuestion.question;
+    currentQuestionSpan.textContent = currentQuestionIndex + 1;
+    
+    // Update progress bar
+    const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
+    progressBar.style.width = `${progressPercent}%`;
 
-    //todo:explain this in a second
+    questionText.textContent = currentQuestion.question;
 
-    answersContainer.innerHTML=""
-     
- currentQuestion.answers.forEach((answer)=>{
-    const button=document.createElement("button");
-    button.textContent=answer.text;
-    button.classList.add("answer-btn");
+    answersContainer.innerHTML = "";
 
-    // what is dataset? it's a property of the button element that allows you to store custom data
-    button.dataset.correct=answer.correct;
-
-    button.addEventListener("click",selectAnswer);
-    answersContainer.appendChild(button);
- })
+    currentQuestion.answers.forEach((answer) => {
+        const button = document.createElement("button");
+        button.textContent = answer.text;
+        button.classList.add("answer-btn");
+        button.dataset.correct = answer.correct;
+        button.addEventListener("click", selectAnswer);
+        answersContainer.appendChild(button);
+    });
 }
+
 
 function selectAnswer(event){
     //optimization check
@@ -123,7 +123,7 @@ function selectAnswer(event){
         if(button.dataset.correct==="true"){
             button.classList.add("correct");
         }else{
-            button.classList.add("incorrect");
+           button.classList.add("wrong");
         }
     });
     if(isCorrect){
