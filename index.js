@@ -72,7 +72,7 @@ maxScoreSpan.textContent=quizQuestions.length;
 
 // event listeners
 
-startButton.addEventListener("click",startQuiz);
+startButton.addEventListener("click",StartQuiz);
 startButton.addEventListener("click",restartQuiz);
 
 function startQuiz(){
@@ -85,7 +85,7 @@ quizScreen.classList.add("active");
 
 showQuestion()
 }
-function showQustion(){
+function showQuestion(){
     // reset state
     answerDisabled=false;
     const currentQuestion=quizQuestions[currentQuestionIndex];
@@ -117,7 +117,7 @@ function selectAnswer(event){
     if(answerDisabled)return
     answerDisabled=true;
     const selectedButton=event.target;
-    const iscorrect=selectedButton.dataset.correct==="true"
+    const isCorrect=selectedButton.dataset.correct==="true"
 
     Array.from(answersContainer.children).forEach((button)=>{
         if(button.dataset.correct==="true"){
@@ -126,7 +126,7 @@ function selectAnswer(event){
             button.classList.add("incorrect");
         }
     });
-    if(iscorrect){
+    if(isCorrect){
         score++;
         scoreSpan.textContent=score
     }
@@ -134,7 +134,7 @@ function selectAnswer(event){
         currentQuestionIndex++;
         // check if there are more questions or if the quiz is over
         if(currentQuestionIndex<quizQuestions.length){
-         showQustion()
+         showQuestion()
         }else {
             showResults()
         }
