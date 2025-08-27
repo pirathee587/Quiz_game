@@ -60,3 +60,108 @@ const quizQuestions = [
     ],
   },
 ];
+
+// quiz State vars
+
+let currentQuestionIndex=0;
+let score=0;
+let answerDisabled=false;
+
+totalQuestionsSpan.textContent=quizQuestions.length;
+maxScoreSpan.textContent=quizQuestions.length;
+
+// event listeners
+
+startButton.addEventListener("click",startQuiz);
+startButton.addEventListener("click",restartQuiz);
+
+function startQuiz(){
+// reset vars
+currentQuestionIndex=0;
+scoreSpan.textContent=0;
+
+startScreen.classList.remove("active");
+quizScreen.classList.add("active");
+
+showQuestion()
+}
+function showQustion(){
+    // reset state
+    answerDisabled=false;
+    const currentQuestion=quizQuestions[currentQuestionIndex];
+
+    currentQuestionSpan.textContent=currentQuestionIndex+1;
+    const progressPercent=(currentQuestionIndex/quizQuestions.length)*100;
+    questionText.textContent=currentQuestion.question;
+
+    //todo:explain this in a second
+
+    answersContainer.innerHTML=""
+     
+ currentQuestion.answers.forEach((answer)=>{
+    const button=document.createElement("button");
+    button.textContent=answer.text;
+    button.classList.add("answer-btn");
+
+    // what is dataset? it's a property of the button element that allows you to store custom data
+    button.dataset.correct=answer.correct;
+
+    button.addEventListener("click",selectAnswer);
+    answersContainer.appendChild(button);
+ })
+}
+
+function selectAnswer(event){
+    //optimization check
+
+    if(answerDisabled)return
+    answerDisabled=true;
+    const selectedButton=event.target;
+    const iscorrect=selectedButton.dataset.correct==="true"
+
+    Array.from(answersContainer.children).forEach((button)=>{
+        if(button.dataset.correct==="true"){
+            button.classList.add("correct");
+        }else{
+            button.classList.add("incorrect");
+        }
+    });
+    if(iscorrect){
+        score++;
+        scoreSpan.textContent=score
+    }
+    setTimeout(()=>{
+        currentQuestionIndex++;
+        // check if there are more questions or if the quiz is over
+        if(currentQuestionIndex<quizQuestions.length){
+         showQustion()
+        }else {
+            showResults()
+        }
+    },1000)
+}
+function showResults(){
+    quizScreen.classList.remove("active")
+    resultScreen.classList.add("active")
+
+    finalScoreSpan.textContent=score;
+
+    const percentage=(score/quizQuestions.length)*100
+    if (percentage === 100) {
+    resultMessage.textContent = "Perfect! You're a genius!";
+  } else if (percentage >= 80) {
+    resultMessage.textContent = "Great job! You know your stuff!";
+  } else if (percentage >= 60) {
+    resultMessage.textContent = "Good effort! Keep learning!";
+  } else if (percentage >= 40) {
+    resultMessage.textContent = "Not bad! Try again to improve!";
+  } else {
+    resultMessage.textContent = "Keep studying! You'll get better!";
+  }
+}   
+function restart(){
+    resultScreen.classList.remove("active")
+
+    startQuiz();
+
+}
